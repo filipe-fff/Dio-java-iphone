@@ -7,5 +7,4 @@ public interface ITelefone {
     public abstract void atenderTelefone();
     public abstract void desatenderTelefone();
     public abstract void iniciarCorreioVozTelefone(String msg);
-    public abstract String mostrarCorreioVozTelefone();
 }

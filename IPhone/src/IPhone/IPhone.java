@@ -1,29 +1,25 @@
 package IPhone;
+
 import IPhone.interfaces.IInternet;
 import IPhone.interfaces.IMusica;
 import IPhone.interfaces.ITelefone;
-
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class IPhone implements IMusica, ITelefone, IInternet {
     private boolean ligadoIPhone;
-
     private boolean ligadoMusica;
     private String musica;
     private boolean pauseMusica;
-
-
     private boolean ligadoTelefone;
     private boolean atendidoTelefone;
     private String correioVozTelefone;
-
     private boolean ligadoInternet;
-    private String[] paginasInternet;
+    private ArrayList<String> paginasInternet;
     private int paginaAtual;
 
-
-
     IPhone() {
-        this.desligarTodoHome();
+        this.reiniciarIPhone();
         this.setLigadoInternet(false);
         this.setCorreioVozTelefone(null);
     }
@@ -37,29 +33,19 @@ public class IPhone implements IMusica, ITelefone, IInternet {
             System.out.println("Não pode ligar o IPhone já que ele já está ligado.");
         }
     }
-
     public void desligarIPhone() {
         if ( this.isLigadoIPhone() ) {
-            this.desligarTodoHome();
+            this.reiniciarIPhone();
         } else {
             System.out.println("Não pode desligar o IPhone já que ele já está desligado.");
         }
     }
-
     public void limparConsole() {
-        try {
-            final String os = System.getProperty("os.name");
-
-            if (os.contains("Windows")) {
-                Runtime.getRuntime().exec("cls");
-            } else {
-                Runtime.getRuntime().exec("clear");
-            }
-
-        } catch (final Exception e) {}
+        for(int n = 0; n < 10; n++) {
+            System.out.print("\r\n");
+        }
     }
-
-    public void desligarTodoHome() {
+    public void reiniciarIPhone() {
         this.setLigadoIPhone(false);
         this.setLigadoMusica(false);
         this.setMusica(null);
@@ -67,10 +53,12 @@ public class IPhone implements IMusica, ITelefone, IInternet {
         this.setLigadoTelefone(false);
         this.setAtendidoTelefone(false);
         this.setPaginaAtual(0);
+        this.adicionarNovaAbaInternet();
     }
 
     // Musica
     // ---------------------------------------------------
+    // ligar música => ligado IPhone, não ligado música, ligado internet, ter música
     public void ligarMusica() {
         if (this.isLigadoIPhone()) {
             if (!this.isLigadoMusica()) {
@@ -90,7 +78,6 @@ public class IPhone implements IMusica, ITelefone, IInternet {
             System.out.println("Vc não pode ligar a musica com o IPhone desligado.");
         }
     }
-
     public void desligarMusica() {
         if(this.isLigadoIPhone()) {
             if(this.isLigadoMusica()) {
@@ -102,125 +89,324 @@ public class IPhone implements IMusica, ITelefone, IInternet {
             System.out.println("Vc não pode desligar a música com o IPhone desligado.");
         }
     }
-
-    public void pausarMusica() {}
-
-    public void despausarMusica() {}
-
-    public void selecionarMusica(String musica) {}
+    public void pausarMusica() {
+        // pausar música => Ligado IPhone, ligado música, não pausado
+        if ( this.isLigadoIPhone() ) {
+            if ( this.isLigadoMusica() ) {
+                if ( !this.isPauseMusica() ) {
+                    this.setPauseMusica(true);
+                } else {
+                    System.out.println("Vc não pode pausar a música se ela já está pausada.");
+                }
+            } else {
+                System.out.println("Vc não pode pausar se a música não está ligada.");
+            }
+        } else {
+            System.out.println("Vc não pode pausar a música enquanto o IPhone estiver desligado.");
+        }
+    }
+    public void despausarMusica() {
+        if ( this.isLigadoIPhone() ) {
+            if ( this.isLigadoMusica() ) {
+                if ( this.isPauseMusica() ) {
+                    this.setPauseMusica(false);
+                } else {
+                    System.out.println("Vc não pode tirar o pause se a música não está pausada.");
+                }
+            } else {
+                System.out.println("Vc não pode pausar se a música não estiver pausada.");
+            }
+        } else {
+            System.out.println("Vc não pode pausar se o IPhone estiver desligado.");
+        }
+    }
+    public void selecionarMusica(String musica) {
+        if ( this.isLigadoIPhone() ) {
+            if( this.isLigadoInternet() ) {
+                this.setMusica(musica);
+            } else {
+                System.out.println("Vc não pode selecionar música se não tem internet");
+            }
+        } else {
+            System.out.println("Vc não pode selecionar a música se o IPhone estiver desligado.");
+        }
+    }
 
     // Telefone
     // ------------------------------------------------
-    public void ligarTelefone() {}
-
-    public void desligarTelefone() {}
-
-    public void atenderTelefone() {}
-
-    public void desatenderTelefone() {}
-
-    public void iniciarCorreioVozTelefone(String msg) {}
-
-    public String mostrarCorreioVozTelefone() {
-        return this.getCorreioVozTelefone();
+    public void ligarTelefone() {
+        // ligar telefone => ligado IPhone, ligado internet, não ligado o telefone
+        if ( this.isLigadoIPhone() ) {
+            if ( this.isLigadoInternet() ) {
+                if ( !this.isLigadoTelefone() ) {
+                    this.setLigadoTelefone(true);
+                    this.setAtendidoTelefone(false);
+                } else {
+                    System.out.println("Vc não pode ligar o telefone enquanto ele estiver chamando.");
+                }
+            } else {
+                System.out.println("Vc não pode ligar o telefone se não tiver internet.");
+            }
+        } else {
+            System.out.println("Vc não pode ligar o telefone se o IPhone estiver desligado.");
+        }
+    }
+    public void desligarTelefone() {
+        if ( this.isLigadoIPhone() ) {
+            if ( this.isLigadoTelefone() ) {
+                this.setLigadoTelefone(false);
+            } else {
+                System.out.println("Vc não pode desligar o telefone se ele já está desligado.");
+            }
+        } else {
+            System.out.println("Vc não pode ligar o telefone se o IPhone estiver desligado.");
+        }
+    }
+    public void atenderTelefone() {
+        // atender telefone => ligado IPhone, ligado internet, não ter atendido o telefone
+        if ( this.isLigadoIPhone() ) {
+            if(this.isLigadoInternet()) {
+                if(!this.isAtendidoTelefone()) {
+                    this.setAtendidoTelefone(true);
+                    this.setLigadoTelefone(false);
+                } else {
+                    System.out.println("Vc não pode atender o telefone se vc já está atendendo o telefone.");
+                }
+            } else {
+                System.out.println("Vc não pode atender o telefone se não tem Internet.");
+            }
+        } else {
+            System.out.println("Vc não pode atender o telefone se o IPhone estiver desligado.");
+        }
+    }
+    public void desatenderTelefone() {
+        if(this.isLigadoIPhone()) {
+            if(this.isAtendidoTelefone()) {
+                this.setAtendidoTelefone(false);
+            } else {
+                System.out.println("Vc não pode desligar o telefone se ele já estiver desligado.");
+            }
+        } else {
+            System.out.println("Vc não pode desatender o telefone se ele já estiver desatendido.");
+        }
+    }
+    public void iniciarCorreioVozTelefone(String msg) {
+        // iniciarCorreioVozTelefone => ligado IPhone, ligado internet, não ligando telefone, não atendendo telefone
+        if(this.isLigadoIPhone()) {
+            if(this.isLigadoInternet()) {
+                if(!this.isLigadoTelefone()) {
+                    if(!this.isAtendidoTelefone()) {
+                        this.setCorreioVozTelefone(msg);
+                    } else {
+                        System.out.println("Vc não pode iniciar correio de voz enquanto estiver atendendo telefone.");
+                    }
+                } else {
+                    System.out.println("Vc não pode iniciar correio de voz enquanto estiver ligando telefone.");
+                }
+            } else {
+                System.out.println("Vc não pode iniciar correio de voz sem internet.");
+            }
+        } else {
+            System.out.println("Vc não pode iniciar correio de voz com o IPhone desligado.");
+        }
     }
 
     // Internet
     // ---------------------------------------------------
     public void ligarInternet() {
-        if( this.isLigadoInternet() ) {
-
+        if ( this.isLigadoIPhone() ) {
+            if (!this.isLigadoInternet()) {
+                this.setLigadoInternet(true);
+            } else {
+                System.out.println("Vc não pode ligar a internet se a internet já está ligada.");
+            }
+        } else {
+            System.out.println("Vc não pode ligar a internet com o IPhone desligado.");
         }
     }
-
-    public void desligarInternet() {}
-
-    public void novaPaginaInternet(String p) {}
-
-    public void removerPaginaInternet(String p) {}
-
-    public void removerPaginaInternet(int p) {}
-
-    public void proximaPaginaInternet() {}
-
-    public void anteriorPaginaInternet() {}
-
-    public void exibirPaginasInternet() {}
-
-    public void adicionarNovaAbaInternet() {}
+    public void desligarInternet() {
+        if (this.isLigadoIPhone()) {
+            if (this.isLigadoInternet()) {
+                this.setLigadoInternet(false);
+            } else {
+                System.out.println("Vc não pode desligar a internet se a internet já está desligada");
+            }
+        } else {
+            System.out.println("Vc não pode desligar a internet com o IPhone desligado.");
+        }
+    }
+    public void navegadorInternet() {
+        if (this.isLigadoIPhone()) {
+            if (this.isLigadoInternet()) {
+                Scanner teclado = new Scanner(System.in);
+                sairNavegador:
+                {
+                    while (true) {
+                        this.limparConsole();
+                        System.out.println("==========================================");
+                        System.out.println(this.exibirPaginasInternet());
+                        System.out.println("==========================================");
+                        System.out.println("* 1 - nova aba");
+                        System.out.println("* 2 - nova página");
+                        System.out.println("* 3 - remover página(index/nome)");
+                        System.out.println("* + proxima página / - página anterior");
+                        System.out.println("* \"sair\"");
+                        System.out.print("==> ");
+                        String pagina = teclado.next();
+                        switch (pagina) {
+                            case "1":
+                                this.adicionarNovaAbaInternet();
+                                break;
+                            case "2":
+                                System.out.print("\tnova página: ");
+                                String novaPagina = teclado.next();
+                                this.novaPaginaInternet(novaPagina);
+                                break;
+                            case "3":
+                                System.out.println("\tremover página (index/nome): ");
+                                String remPagina = teclado.next();
+                                if (remPagina.matches("\\d+")) {
+                                    int indexPagina = Integer.parseInt(remPagina);
+                                    if (indexPagina < paginasInternet.size()) {
+                                        this.removerPaginaInternet(indexPagina);
+                                    } else {
+                                        System.out.println("O index da página não existe");
+                                    }
+                                } else {
+                                    if (this.paginasInternet.contains(remPagina)) {
+                                        this.removerPaginaInternet(remPagina);
+                                    } else {
+                                        System.out.println("O nome não está na lista.");
+                                    }
+                                }
+                                break;
+                            case "+":
+                                this.proximaPaginaInternet();
+                                break;
+                            case "-":
+                                this.anteriorPaginaInternet();
+                            case "sair":
+                                break sairNavegador;
+                            default:
+                                System.out.println("comando inválido, tente outro.");
+                        }
+                    }
+                }
+            } else {
+                System.out.println("Vc não pode navegar pelo navegador com a internet desligada.");
+            }
+        } else {
+            System.out.println("Vc não pode ligar o navegador com o IPhone desligado.");
+        }
+    }
+    private void novaPaginaInternet(String p) {
+        this.paginasInternet.add(p);
+    }
+    private void removerPaginaInternet(String p) {
+        this.paginasInternet.remove(p);
+    }
+    private void removerPaginaInternet(int p) {
+        this.paginasInternet.remove(p);
+    }
+    private void proximaPaginaInternet() {
+        if (this.getPaginaAtual() < paginasInternet.size()) {
+            this.setPaginaAtual(this.getPaginaAtual()+1);
+        } else {
+            System.out.println("As paginas já foram no limite máximo");
+        }
+    }
+    private void anteriorPaginaInternet() {
+        if (this.getPaginaAtual() > 0) {
+            this.setPaginaAtual(this.getPaginaAtual()-1);
+        }
+    }
+    public String exibirPaginasInternet() {
+        StringBuilder paginas = new StringBuilder("páginas => ");
+        if(this.getPaginasInternet() != null){
+            for (String pagina : this.getPaginasInternet()) {
+                paginas.append("\t\t\t-").append(pagina);
+            }
+        }
+        return paginas.toString();
+    }
+    private void adicionarNovaAbaInternet() {
+        if(this.paginasInternet != null) {
+            this.paginasInternet.clear();
+        }
+    }
 
     // estados
     // -------------------------------------------------------
     // getters
-    private boolean isLigadoIPhone() {
+    public boolean isLigadoIPhone() {
         return this.ligadoIPhone;
     }
-    private boolean isLigadoMusica() {
+    public boolean isLigadoMusica() {
         return this.ligadoMusica;
     }
-    private String getMusica() {
+    public String getMusica() {
         return this.musica;
     }
-    private boolean isPauseMusica() {
+    public boolean isPauseMusica() {
         return this.pauseMusica;
     }
-    private boolean isLigadoTelefone() {
+    public boolean isLigadoTelefone() {
         return this.ligadoTelefone;
     }
-    private boolean isAtendidoTelefone() {
+    public boolean isAtendidoTelefone() {
         return this.atendidoTelefone;
     }
-    private String getCorreioVozTelefone() {
+    public String getCorreioVozTelefone() {
         return this.correioVozTelefone;
     }
-    private boolean isLigadoInternet() {
+    public boolean isLigadoInternet() {
         return this.ligadoInternet;
     }
-    private String[] getPaginasInternet() {
+    public ArrayList<String> getPaginasInternet() {
         return this.paginasInternet;
     }
-    private int getPaginaAtual() {
+    public int getPaginaAtual() {
         return this.paginaAtual;
     }
 
     // setters
-    private IPhone setLigadoIPhone(boolean ligadoIPhone) {
+    public IPhone setLigadoIPhone(boolean ligadoIPhone) {
         this.ligadoIPhone = ligadoIPhone;
         return this;
     }
-    private IPhone setLigadoMusica(boolean ligadoMusica) {
+    public IPhone setLigadoMusica(boolean ligadoMusica) {
         this.ligadoMusica = ligadoMusica;
         return this;
     }
-    private IPhone setMusica(String musica) {
+    public IPhone setMusica(String musica) {
         this.musica = musica;
         return this;
     }
-    private IPhone setPauseMusica(boolean pauseMusica) {
+    public IPhone setPauseMusica(boolean pauseMusica) {
         this.pauseMusica = pauseMusica;
         return this;
     }
-    private IPhone setLigadoTelefone(boolean ligadoTelefone) {
+    public IPhone setLigadoTelefone(boolean ligadoTelefone) {
         this.ligadoTelefone = ligadoTelefone;
         return this;
     }
-    private IPhone setAtendidoTelefone(boolean atendidoTelefone) {
+    public IPhone setAtendidoTelefone(boolean atendidoTelefone) {
         this.atendidoTelefone = atendidoTelefone;
         return this;
     }
-    private IPhone setCorreioVozTelefone(String correioVozTelefone) {
+    public IPhone setCorreioVozTelefone(String correioVozTelefone) {
         this.correioVozTelefone = correioVozTelefone;
         return this;
     }
-    private IPhone setLigadoInternet(boolean ligadoInternet) {
+    public IPhone setLigadoInternet(boolean ligadoInternet) {
         this.ligadoInternet = ligadoInternet;
         return this;
     }
-    private IPhone setPaginasInternet(String[] paginasInternet) {
+    public IPhone setPaginasInternet(ArrayList<String> paginasInternet) {
         this.paginasInternet = paginasInternet;
         return this;
     }
-    private IPhone setPaginaAtual(int paginaAtual) {
+    public IPhone setPaginaAtual(int paginaAtual) {
         this.paginaAtual = paginaAtual;
         return this;
     }
