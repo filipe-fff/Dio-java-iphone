@@ -1,5 +1,9 @@
 package IPhone;
 
+import IPhone.apps.Musica;
+import IPhone.apps.Navegador;
+import IPhone.apps.Telefone;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -8,15 +12,30 @@ public class IPhone {
     private boolean ligadoInternet;
     private String msgErro;
 
+    private Musica musicaApp;
+    private Telefone telefoneApp;
+    private Navegador navegadorApp;
+
 
     IPhone() {
         this.reiniciarIPhone();
         this.setLigadoInternet(false);
+
+        this.musicaApp = new Musica();
+        this.telefoneApp = new Telefone();
+        this.navegadorApp = new Navegador();
     }
 
     // IPhone
     // -----------------------------------------------------
-    public void ligarIPhone() {
+    public void home() {
+        System.out.println("\t\tIPhone");
+        System.out.println("____________________________");
+        System.out.printf("ligado IPhone?: %s ( 1: ligar IPhone | 2: desligar IPhone )\n", this.isLigadoIPhone()?"Sim":"Não");
+        System.out.println("ligado internet?: %s ( 3: ligar internet | 4: desligar internet )\n");
+        System.out.println("____________________________");
+    }
+    private void ligarIPhone() {
         if( !this.isLigadoIPhone()) {
             this.setLigadoIPhone(true);
             this.setMsgErro("-");
@@ -24,7 +43,7 @@ public class IPhone {
             this.setMsgErro("Não pode ligar o IPhone já que ele já está ligado.");
         }
     }
-    public void desligarIPhone() {
+    private void desligarIPhone() {
         if ( this.isLigadoIPhone() ) {
             this.reiniciarIPhone();
             this.setMsgErro("-");
@@ -32,19 +51,19 @@ public class IPhone {
             this.setMsgErro("Não pode desligar o IPhone já que ele já está desligado.");
         }
     }
-    public void limparConsole() {
+    private void limparConsole() {
         for(int n = 0; n < 7; n++) {
             System.out.print("\r\n");
         }
     }
-    public void reiniciarIPhone() {
+    private void reiniciarIPhone() {
         this.setLigadoIPhone(false);
         this.setMsgErro("-");
     }
 
     // Internet
     // ---------------------------------------------------
-    public void ligarInternet() {
+    private void ligarInternet() {
         if ( this.isLigadoIPhone() ) {
             if (!this.isLigadoInternet()) {
                 this.setLigadoInternet(true);
@@ -56,7 +75,7 @@ public class IPhone {
             this.setMsgErro("Vc não pode ligar a internet com o IPhone desligado.");
         }
     }
-    public void desligarInternet() {
+    private void desligarInternet() {
         if (this.isLigadoIPhone()) {
             if (this.isLigadoInternet()) {
                 this.setLigadoInternet(false);
@@ -72,24 +91,24 @@ public class IPhone {
     // estados
     // -------------------------------------------------------
     // getters
-    public boolean isLigadoIPhone() {
+    private boolean isLigadoIPhone() {
         return this.ligadoIPhone;
     }
-    public boolean isLigadoInternet() {
+    private boolean isLigadoInternet() {
         return this.ligadoInternet;
     }
-    public String getMsgErro() {
+    private String getMsgErro() {
         return this.msgErro;
     }
 
     // setters
-    public void setLigadoIPhone(boolean ligadoIPhone) {
+    private void setLigadoIPhone(boolean ligadoIPhone) {
         this.ligadoIPhone = ligadoIPhone;
     }
-    public void setLigadoInternet(boolean ligadoInternet) {
+    private void setLigadoInternet(boolean ligadoInternet) {
         this.ligadoInternet = ligadoInternet;
     }
-    public void setMsgErro(String msgErro) {
+    private void setMsgErro(String msgErro) {
         this.msgErro = msgErro;
     }
 }

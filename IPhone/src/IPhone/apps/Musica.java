@@ -24,14 +24,14 @@ public class Musica implements IMusica {
                 {
                     while (true) {
                         System.out.println("\t\tMúsica");
-                        System.out.println("/////////////////////////////////");
+                        System.out.println("//////////////////////////////////////////////////////////////////");
                         System.out.printf("Erro: %s\n", this.getMsgErro());
-                        System.out.println("/////////////////////////////////");
+                        System.out.println("//////////////////////////////////////////////////////////////////");
                         System.out.printf("/ música ligada?: %s ( 1: ligar | 2: desligar )\n", this.isLigadoMusica()?"Sim":"Não");
                         System.out.printf("/ música pausada?: %s ( 3: pausar | 4: despausar )\n", this.isPauseMusica()?"Sim":"Não");
                         System.out.printf("/ música selecionada: %s ( 5: selecionar música )\n", (this.getMusica() != null)?this.getMusica():"Nenhuma");
                         System.out.println("/ sair da música => ( \"sair\" )");
-                        System.out.println("/////////////////////////////////");
+                        System.out.println("//////////////////////////////////////////////////////////////////");
                         System.out.print("\n\t////>>> ");
                         String op = teclado.next();
                         switch (op) {
