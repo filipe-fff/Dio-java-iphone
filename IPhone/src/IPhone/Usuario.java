@@ -1,30 +1,19 @@
 package IPhone;
 
-import java.util.Scanner;
+import IPhone.apps.Musica;
+import IPhone.apps.Navegador;
+import IPhone.apps.Telefone;
+
 
 public class Usuario {
 
     public static void main(String[] args) {
-
-        IPhone iphone = new IPhone();
-        Scanner teclado = new Scanner(System.in);
+        Musica musica = new Musica();
+        musica.setLigadoIPhone(true);
+        musica.setLigadoInternet(true);
         while (true) {
-            System.out.println("\t\tIPhone");
-            System.out.println("\t******************************************");
-            System.out.println("* ");
-            System.out.println("* ");
-            System.out.println("* ");
-            System.out.println("* ");
-            System.out.println("* ");
-            System.out.println("* ");
-            System.out.println("* ");
-            System.out.println("* ");
-            System.out.println("* ");
-            System.out.println("* ");
-            System.out.println("* ");
-
-            System.out.println("\t******************************************");
-            iphone.navegadorInternet();
+            System.out.println("Nova janela");
+            musica.appMusica();
         }
     }
 }
