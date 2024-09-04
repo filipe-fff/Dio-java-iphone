@@ -22,24 +22,11 @@ public class Navegador implements INavegador {
             if (this.isLigadoInternet()) {
                 this.setMsgErro("-");
                 Scanner teclado = new Scanner(System.in);
+                this.limparConsole();
                 sairNavegador:
                 {
                     while (true) {
-                        System.out.println("\t\tNavegador");
-                        System.out.println("================================================");
-                        System.out.println(this.exibirPaginasNavegador());
-                        System.out.println("================================================");
-                        System.out.printf("Erro: %s\n", this.getMsgErro());
-                        System.out.println("================================================");
-                        this.paginaAtualNavegador();
-                        System.out.println("================================================");
-                        System.out.println("\t******************************************");
-                        System.out.println("\t* 1 - nova aba");
-                        System.out.println("\t* 2 - nova página");
-                        System.out.println("\t* 3 - remover página(index/nome)");
-                        System.out.println("\t* + proxima página / - página anterior");
-                        System.out.println("\t* \"sair\"");
-                        System.out.println("\t******************************************");
+                        this.tabela();
                         System.out.print("\t==> ");
                         String pagina = teclado.next();
                         switch (pagina) {
@@ -48,14 +35,16 @@ public class Navegador implements INavegador {
                                 this.setMsgErro("-");
                                 break;
                             case "2":
+                                teclado.nextLine();
                                 System.out.print("\tnova página: ");
-                                String novaPagina = teclado.next();
+                                String novaPagina = teclado.nextLine();
                                 this.novaPaginaNavegador(novaPagina);
                                 this.setMsgErro("-");
                                 break;
                             case "3":
+                                teclado.nextLine();
                                 System.out.print("\tremover página (index/nome): ");
-                                String remPagina = teclado.next();
+                                String remPagina = teclado.nextLine();
                                 if (remPagina.matches("\\d+")) {
                                     int indexPagina = Integer.parseInt(remPagina);
                                     if (indexPagina < getPaginasNavegador().size()) {
@@ -107,6 +96,23 @@ public class Navegador implements INavegador {
         this.setMsgErro("-");
     }
 
+    private void tabela() {
+        System.out.println("\t\tNavegador");
+        System.out.println("================================================");
+        System.out.println(this.exibirPaginasNavegador());
+        System.out.println("================================================");
+        System.out.printf("Erro: %s\n", this.getMsgErro());
+        System.out.println("================================================");
+        this.paginaAtualNavegador();
+        System.out.println("================================================");
+        System.out.println("\t******************************************");
+        System.out.println("\t* 1 - nova aba");
+        System.out.println("\t* 2 - nova página");
+        System.out.println("\t* 3 - remover página(index/nome)");
+        System.out.println("\t* + proxima página / - página anterior");
+        System.out.println("\t* \"sair\"");
+        System.out.println("\t******************************************");
+    }
     private void paginaAtualNavegador() {
         System.out.print("página atual: ");
         if (this.paginasNavegador.size() > 0){
@@ -149,10 +155,11 @@ public class Navegador implements INavegador {
         }
     }
     private String exibirPaginasNavegador() {
+        int index = 0;
         StringBuilder paginas = new StringBuilder("páginas => ");
         if(this.getPaginasNavegador() != null){
             for (String pagina : this.getPaginasNavegador()) {
-                paginas.append("\n\t\t\t - ").append(pagina);
+                paginas.append("\n\t\t\t").append(index++).append(" - ").append(pagina);
             }
         }
         return paginas.toString();

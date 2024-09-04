@@ -20,18 +20,11 @@ public class Musica implements IMusica {
             if (this.isLigadoInternet()) {
                 this.setMsgErro("-");
                 Scanner teclado = new Scanner(System.in);
+                this.limparConsole();
                 sairMusica:
                 {
                     while (true) {
-                        System.out.println("\t\tMúsica");
-                        System.out.println("//////////////////////////////////////////////////////////////////");
-                        System.out.printf("Erro: %s\n", this.getMsgErro());
-                        System.out.println("//////////////////////////////////////////////////////////////////");
-                        System.out.printf("/ música ligada?: %s ( 1: ligar | 2: desligar )\n", this.isLigadoMusica()?"Sim":"Não");
-                        System.out.printf("/ música pausada?: %s ( 3: pausar | 4: despausar )\n", this.isPauseMusica()?"Sim":"Não");
-                        System.out.printf("/ música selecionada: %s ( 5: selecionar música )\n", (this.getMusica() != null)?this.getMusica():"Nenhuma");
-                        System.out.println("/ sair da música => ( \"sair\" )");
-                        System.out.println("//////////////////////////////////////////////////////////////////");
+                        this.tabela();
                         System.out.print("\n\t////>>> ");
                         String op = teclado.next();
                         switch (op) {
@@ -49,8 +42,9 @@ public class Musica implements IMusica {
                                 this.despausarMusica();
                                 break;
                             case "5":
+                                teclado.nextLine();
                                 System.out.print("\tmúsica: ");
-                                String musica = teclado.next();
+                                String musica = teclado.nextLine();
                                 this.selecionarMusica(musica);
                                 break;
                             case "sair":
@@ -76,7 +70,18 @@ public class Musica implements IMusica {
             System.out.print("\r\n");
         }
     }
-    // ligado internet, ter música
+
+    private void tabela() {
+        System.out.println("\t\tMúsica");
+        System.out.println("//////////////////////////////////////////////////////////////////");
+        System.out.printf("Erro: %s\n", this.getMsgErro());
+        System.out.println("//////////////////////////////////////////////////////////////////");
+        System.out.printf("/ música ligada?: %s ( 1: ligar | 2: desligar )\n", this.isLigadoMusica()?"Sim":"Não");
+        System.out.printf("/ música pausada?: %s ( 3: pausar | 4: despausar )\n", this.isPauseMusica()?"Sim":"Não");
+        System.out.printf("/ música selecionada: %s ( 5: selecionar música )\n", (this.getMusica() != null)?this.getMusica():"Nenhuma");
+        System.out.println("/ sair da música => ( \"sair\" )");
+        System.out.println("//////////////////////////////////////////////////////////////////");
+    }
     private void ligarMusica() {
         if (!this.isLigadoMusica()) {
             if (this.getMusica() != null) {

@@ -23,6 +23,68 @@ public class Telefone implements ITelefone {
         }
     }
 
+    public void appTelefone() {
+        if (this.isLigadoIPhone()) {
+            if (this.isLigadoInternet()) {
+                this.setMsgErro("-");
+                Scanner teclado = new Scanner(System.in);
+                String op;
+                this.limparConsole();
+                sairTelefone: {
+                    while (true) {
+                        this.tabela();
+                        System.out.print("\ttelefone: ");
+                        op = teclado.next();
+
+                        switch (op) {
+                            case "1":
+                                this.ligarTelefone();
+                                break;
+                            case "2":
+                                this.desligarTelefone();
+                                break;
+                            case "3":
+                                this.atenderTelefone();
+                                break;
+                            case "4":
+                                this.desatenderTelefone();
+                                break;
+                            case "5":
+                                teclado.nextLine();
+                                System.out.print("\tcorreio de voz: ");
+                                op = teclado.nextLine();
+                                this.iniciarCorreioVozTelefone(op);
+                                break;
+                            case "sair":
+                                this.limparConsole();
+                                this.setLigadoTelefone(false);
+                                this.setAtendidoTelefone(false);
+                                this.setMsgErro("-");
+                                break sairTelefone;
+                            default:
+                                this.setMsgErro("-");
+                        }
+                        this.limparConsole();
+                    }
+                }
+            } else {
+                this.setMsgErro("Vc não pode fazer ligações sem internet.");
+            }
+        } else {
+            this.setMsgErro("Vc não pode fazer ligações com o IPhone desligado.");
+        }
+    }
+    private void tabela() {
+        System.out.println("\t\tTelefone");
+        System.out.println("---------------------------------------------------------------------------");
+        System.out.printf("Erro: %s\n", this.getMsgErro());
+        System.out.println("---------------------------------------------------------------------------");
+        System.out.printf("| ligado telefone?: %s ( 1: ligar | 2: desligar )\n", this.isLigadoTelefone()?"Sim":"Não");
+        System.out.printf("| atendido telefone?: %s ( 3: atender | 4: desatender )\n", this.isAtendidoTelefone()?"Sim":"Não");
+        System.out.printf("| correio de voz: %s ( 5: iniciar correio de voz )\n", this.getCorreioVozTelefone() != null?this.getCorreioVozTelefone():"Nenhum");
+        System.out.println("| sair ==> ( \"sair\" )\n");
+        System.out.println("---------------------------------------------------------------------------");
+    }
     private void ligarTelefone() {
         // ligar telefone => não ligado o telefone
         if ( !this.isLigadoTelefone() ) {
@@ -70,63 +132,6 @@ public class Telefone implements ITelefone {
             }
         } else {
             this.setMsgErro("Vc não pode iniciar correio de voz enquanto estiver ligando telefone.");
-        }
-    }
-    public void appTelefone() {
-        if (this.isLigadoIPhone()) {
-            if (this.isLigadoInternet()) {
-                this.setMsgErro("-");
-                Scanner teclado = new Scanner(System.in);
-                String op;
-                sairTelefone: {
-                    while (true) {
-                        System.out.println("\t\tTelefone");
-                        System.out.println("---------------------------------------------------------------------------");
-                        System.out.printf("Erro: %s\n", this.getMsgErro());
-                        System.out.println("---------------------------------------------------------------------------");
-                        System.out.printf("| ligado telefone?: %s ( 1: ligar | 2: desligar )\n", this.isLigadoTelefone()?"Sim":"Não");
-                        System.out.printf("| atendido telefone?: %s ( 3: atender | 4: desatender )\n", this.isAtendidoTelefone()?"Sim":"Não");
-                        System.out.printf("| correio de voz: %s ( 5: iniciar correio de voz )\n", this.getCorreioVozTelefone());
-                        System.out.println("| sair ==> ( \"sair\" )\n");
-                        System.out.println("---------------------------------------------------------------------------");
-                        System.out.print("\ttelefone: ");
-                        op = teclado.next();
-
-                        switch (op) {
-                            case "1":
-                                this.ligarTelefone();
-                                break;
-                            case "2":
-                                this.desligarTelefone();
-                                break;
-                            case "3":
-                                this.atenderTelefone();
-                                break;
-                            case "4":
-                                this.desatenderTelefone();
-                                break;
-                            case "5":
-                                System.out.print("\tcorreio de voz: ");
-                                op = teclado.next();
-                                this.iniciarCorreioVozTelefone(op);
-                                break;
-                            case "sair":
-                                this.limparConsole();
-                                this.setLigadoTelefone(false);
-                                this.setAtendidoTelefone(false);
-                                this.setMsgErro("-");
-                                break sairTelefone;
-                            default:
-                                this.setMsgErro("-");
-                        }
-                        this.limparConsole();
-                    }
-                }
-            } else {
-                this.setMsgErro("Vc não pode fazer ligações sem internet.");
-            }
-        } else {
-            this.setMsgErro("Vc não pode fazer ligações com o IPhone desligado.");
         }
     }
 
